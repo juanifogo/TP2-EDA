@@ -25,22 +25,22 @@ using namespace std;
 TrigramProfile buildTrigramProfile(const Text &text)
 {
     wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
-
-    // Your code goes here...
+    TrigramProfile profile;
     for (auto line : text)
     {
-        if ((line.length() > 0) &&
-            (line[line.length() - 1] == '\r'))
-            line = line.substr(0, line.length() - 1);
+        if (line.length() > 0) {
+            if (line[line.length() - 1] == '\r') {
+                line = line.substr(0, line.length() - 1);
+            }
+            wstring unicodeString = converter.from_bytes(line);
+            for (int i = 0; i < unicodeString.length()-2; i++) {
+                string trigram = converter.to_bytes(unicodeString.substr(i, 3));
+                profile[trigram]++;
+            }
+        } 
     }
 
-    // Tip: converts UTF-8 string to wstring
-    // wstring unicodeString = converter.from_bytes(textLine);
-
-    // Tip: convert wstring to UTF-8 string
-    // string trigram = converter.to_bytes(unicodeTrigram);
-
-    return TrigramProfile(); // Fill-in result here
+    return profile;
 }
 
 /**
@@ -50,8 +50,14 @@ TrigramProfile buildTrigramProfile(const Text &text)
  */
 void normalizeTrigramProfile(TrigramProfile &trigramProfile)
 {
-    // Your code goes here...
-
+    float squareSum = 0.0f;
+    for (auto& element : trigramProfile) {
+        squareSum += element.second * element.second;
+    }
+    float squareSum_root = sqrt(squareSum);
+    for (auto& element : trigramProfile) {
+        element.second /= squareSum_root;
+    }
     return;
 }
 
@@ -64,9 +70,13 @@ void normalizeTrigramProfile(TrigramProfile &trigramProfile)
  */
 float getCosineSimilarity(TrigramProfile &textProfile, TrigramProfile &languageProfile)
 {
-    // Your code goes here...
-
-    return 0; // Fill-in result here
+    float score = 0;
+    for (auto& element : textProfile) {
+        if (languageProfile.find(element.first) != languageProfile.end()) {
+            score += element.second * languageProfile[element.first];
+        }
+    }
+    return score;
 }
 
 /**
@@ -78,7 +88,16 @@ float getCosineSimilarity(TrigramProfile &textProfile, TrigramProfile &languageP
  */
 string identifyLanguage(const Text &text, LanguageProfiles &languages)
 {
-    // Your code goes here...
-
-    return ""; // Fill-in result here
+    string language_code_best;
+    float cosine_score_best = 0.0f;
+    TrigramProfile text_profile = buildTrigramProfile(text);
+    normalizeTrigramProfile(text_profile);
+    for (auto& language : languages) {
+        float score = getCosineSimilarity(text_profile, language.trigramProfile);
+        if (score > cosine_score_best) {
+            cosine_score_best = score;
+            language_code_best = language.languageCode;
+        }
+    }
+    return language_code_best;
 }
