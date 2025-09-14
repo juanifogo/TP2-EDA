@@ -93,11 +93,11 @@ Italiano.
 And there's a hand, my trusty fiere! and gie's a hand o' thine! And we’ll tak' a right gude-willie waught, for auld lang syne.
 ```
 
-Lequel predice que el idioma es inglés. El programa falla principalmente por la diferencia enorme de trigramas coincidientes entre el texto con cada idioma, es decir, al comparar con el inglés se encuentran 74 coincidencias (con uno duplicado, es decir 73 elementos)
-mientras que con el escocés se encuentran 47. La intersección de estos dos conjuntos da una cantidad de 44 elementos, por lo que se puede deducir que el programa realiza el cálculo de la
-similitud por coseno con 44 elementos para ambos idiomas, pero con el inglés ademas realiza el cálculo con 29 elementos extra, mientras que con el escocés lo realiza con 3 extra
-esta enorme diferencia de trigramas comunes por cada lenguaje es lo que le da la ventaja al inglés y por eso el programa termina prediciendo este idioma.
-Aquí figuran los datos recaudados con el programa:
+Lequel predice que el idioma es inglés. El programa falla principalmente por la diferencia enorme de trigramas coincidientes entre el texto con cada idioma, es decir, al comparar con el inglés se encuentran 74 coincidencias (con uno duplicado, es decir 73 elementos),
+mientras que con el escocés se encuentran 47.  
+La intersección de estos dos conjuntos da una cantidad de 44 elementos, por lo que se puede deducir que el programa realiza el cálculo de la similitud por coseno con 44 elementos para ambos idiomas, pero con el inglés ademas realiza el cálculo con 29 elementos extra, mientras que con el escocés lo realiza con 3 extra.  
+Esta enorme diferencia de trigramas comunes por cada lenguaje es lo que le da la ventaja al inglés y por eso el programa termina prediciendo este idioma.  
+Aquí figuran los datos recolectados con el programa:
 
 ```
 Predicción de Lequel: Inglés
@@ -154,7 +154,7 @@ D,  | Frequency: 0.0058749
 ```
 
 Como se puede apreciar, para el idioma afrikáans 4 de los 5 trigramas coincidientes tienen frecuencias de 1 orden superior a las del inglés, es esta la diferencia que 
-favorece a afrikáans como el mejor candidato para la predicción. 
+favorece a afrikáans como el mejor candidato para la predicción.  
    Sin embargo, se realizó la prueba nuevamente pero convirtiendo el texto original a letra minúscula y el resultado fue el siguiente:
 
 ```
