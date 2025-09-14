@@ -14,6 +14,8 @@
 #include "CSVData.h"
 #include "Lequel.h"
 
+#define DEBUG 1
+
 using namespace std;
 
 const string LANGUAGECODE_NAMES_FILE = "resources/languagecode_names_es.csv";
@@ -75,7 +77,7 @@ bool loadLanguagesData(map<string, string> &languageCodeNames, LanguageProfiles 
     return true;
 }
 
-int main(int, char *[])
+int main(int argc, char *argv[])
 {
     map<string, string> languageCodeNames;
     LanguageProfiles languages;
@@ -108,7 +110,7 @@ int main(int, char *[])
             Text text;
             getTextFromString(clipboard, text);
 
-            languageCode = identifyLanguage(text, languages);
+            languageCode = identifyLanguage(text, languages, DEBUG);
         }
 
         if (IsFileDropped())
@@ -120,7 +122,7 @@ int main(int, char *[])
                 Text text;
                 getTextFromFile(droppedFiles.paths[0], text);
 
-                languageCode = identifyLanguage(text, languages);
+                languageCode = identifyLanguage(text, languages, DEBUG);
 
                 UnloadDroppedFiles(droppedFiles);
             }

@@ -12,6 +12,7 @@
 
 #include <list>
 #include <map>
+#include <vector>
 #include <string>
 
 #include "Text.h"
@@ -21,6 +22,9 @@ typedef std::map<std::string, float> TrigramProfile;
 
 // TrigramList: list of trigrams
 typedef std::list<std::string> TrigramList;
+
+// TrigramMatches: vector of matches between the entered text and the language
+typedef std::vector<std::string> TrigramMatches;
 
 struct LanguageProfile
 {
@@ -33,7 +37,7 @@ typedef std::list<LanguageProfile> LanguageProfiles;
 // Functions
 TrigramProfile buildTrigramProfile(const Text &text);
 void normalizeTrigramProfile(TrigramProfile &trigramProfile);
-float getCosineSimilarity(TrigramProfile &textProfile, TrigramProfile &languageProfile);
-std::string identifyLanguage(const Text &text, LanguageProfiles &languages);
+float getCosineSimilarity(TrigramProfile& textProfile, TrigramProfile &languageProfile, unsigned &numberOfTrigramsMatch, TrigramMatches &tMatches);
+std::string identifyLanguage(const Text &text, LanguageProfiles &languages, bool debug);
 
 #endif
