@@ -196,5 +196,11 @@ el procesamiento paralelo del texto original, dividiendolo en partes y procesand
 
 ## Lenguajes extra.
 
-[guaraní, catalán, asturiano, e incluso ¡lenguaje C, lenguaje C++ y Python!]
+Se implemento la posibilidad de agregar un nuevo idioma al programa simplemente añadiendo un archivo de texto (con codificacion UTF-8) 
+nombrado con el formato: `codigoDeLenguaje_nombreDeLenguaje.txt` en la carpeta `resources/texts` cuyo contenido sean palabras de 
+dicho lenguaje, de esta forma el programa se encarga de crear el perfil de lenguaje con los trigramas presentes en el archivo y 
+sus respectivas frecuencias absolutas, luego guarda dichos datos en un archivo `codigoDeLenguaje.csv` dentro de la 
+carpeta de trigramas y ademas automaticamente agrega el codigo del lenguaje y su nombre al archivo `languagecode_names_es.csv`.
+De esta forma se agregaron 2 archivos de prueba llamados `cat_Catalan.txt` y `pyt_Python.txt` en la carpeta `resources/texts` los cuales seran procesados
+por el programa para crear sus respectivos archivos `.csv` y añadir sus codigos de lenguaje al archivo `languagecode_name_es.csv`.
 

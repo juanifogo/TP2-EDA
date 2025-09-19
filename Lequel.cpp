@@ -33,7 +33,11 @@ TrigramProfile buildTrigramProfile(const Text &text)
                 line = line.substr(0, line.length() - 1);
             }
             wstring unicodeString = converter.from_bytes(line);
-            for (int i = 0; i < unicodeString.length()-2; i++) {
+            
+            if (unicodeString.length() < 3)
+                continue;
+            
+            for (int i = 0; i < unicodeString.length()-3; i++) {
                 string trigram = converter.to_bytes(unicodeString.substr(i, 3)); // Checks every posible trigram.
                 profile[trigram]++; // increments absolute frequency of found trigram (creates the trigram if it doesn't exist).
             }

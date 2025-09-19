@@ -8,18 +8,37 @@
 #include <iostream>
 #include <map>
 #include <string>
+#include <filesystem>
 
 #include "raylib.h"
 
 #include "CSVData.h"
 #include "Lequel.h"
 
-#define DEBUG 1
+#define DEBUG 0
+#define SEPARATOR "_"
 
 using namespace std;
 
 const string LANGUAGECODE_NAMES_FILE = "resources/languagecode_names_es.csv";
 const string TRIGRAMS_PATH = "resources/trigrams/";
+const string TEXTS_PATH = "resources/texts/";
+
+static CSVData profileToCSV(TrigramProfile& profile);
+static bool loadCustomLanguages(const string PATH);
+static bool loadLanguagesData(map<string, string>& languageCodeNames, LanguageProfiles& languages);
+
+
+// Converts a trigram profile list<string, float> to a CSVData vector<>
+static CSVData profileToCSV(TrigramProfile &profile)
+{
+    CSVData result;
+    for (auto& trigram : profile) 
+    {
+        result.push_back({trigram.first, to_string((int)trigram.second)});
+    }
+    return result;
+}
 
 /**
  * @brief Loads trigram data.
@@ -29,7 +48,7 @@ const string TRIGRAMS_PATH = "resources/trigrams/";
  * @return true Succeeded
  * @return false Failed
  */
-bool loadLanguagesData(map<string, string> &languageCodeNames, LanguageProfiles &languages)
+static bool loadLanguagesData(map<string, string> &languageCodeNames, LanguageProfiles &languages)
 {
     // Reads available language codes
     cout << "Reading language codes..." << endl;
@@ -77,10 +96,58 @@ bool loadLanguagesData(map<string, string> &languageCodeNames, LanguageProfiles 
     return true;
 }
 
+// Returns true if success
+static bool loadCustomLanguages(const string PATH)
+{
+    if (!filesystem::exists(PATH) || !filesystem::is_directory(PATH))
+        return false;
+
+    for (auto& file : filesystem::directory_iterator(PATH)) 
+    {
+        filesystem::path filePath = file.path();
+        string fileName = filePath.filename().stem().string();
+        size_t pos = fileName.find(SEPARATOR);
+        
+        // Get the data from the file name format: "languageCode_languageName"
+        string languageCode, languageName;
+        if (pos != string::npos)
+        {
+            languageCode = fileName.substr(0, pos);
+            languageName = fileName.substr(pos + 1);
+        }
+
+        if (!languageCode.length() || !languageName.length())
+            return false;
+        
+        // Skip any existing language.
+        string csvFile = TRIGRAMS_PATH + languageCode + ".csv";
+        if (filesystem::exists(csvFile))
+            continue;
+
+        cout << "Loading custom language: " << languageName << endl;
+
+        Text data;
+        getTextFromFile(filePath.string(), data);
+        TrigramProfile languageProfile = buildTrigramProfile(data);
+        CSVData languageData = profileToCSV(languageProfile);
+        writeCSV(csvFile, languageData);
+
+        // Update language code names csv file
+        CSVData languageCodes;
+        readCSV(LANGUAGECODE_NAMES_FILE, languageCodes);
+        languageCodes.push_back({ languageCode, languageName });
+        writeCSV(LANGUAGECODE_NAMES_FILE, languageCodes);
+    }
+    return true;
+}
+
 int main(int argc, char *argv[])
 {
     map<string, string> languageCodeNames;
     LanguageProfiles languages;
+
+    // Funcion para crear el archivo csv de cada archivo .txt encontrado
+    loadCustomLanguages(TEXTS_PATH);
 
     if (!loadLanguagesData(languageCodeNames, languages))
     {
