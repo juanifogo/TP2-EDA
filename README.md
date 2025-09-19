@@ -180,7 +180,19 @@ con el inglés fue mucho más abundante.
 
 ## Identificacion del cuello de botella ante un texto muy grande.
 
-[Completar]
+Se identificó que el cuello de botella del programa cuando se procesan textos grandes esta en la función identifyLanguage de Lequel.cpp,
+la cual tiene una complejidad computacional de O(n), donde n es la cantidad de caracteres unicode del texto original. Esta funcion a su vez
+llama a la función buildTrigramProfile, normalizeTrigramProfile y getCosineSimilarity, las cuales también tienen una complejidad de O(n).
+De estas tres funciones, la que más tiempo consume es buildTrigramProfile, ya que en esta función se realizan varias operaciones costosas dentro de un bucle,
+como la conversión de caracteres unicode a char y viceversa, la inserción y actualización de elementos en un map, y la construcción de strings (metodo substr) temporales para los trigramas.
+
+Para mejorar el rendimiento en estos casos, y centrandonos en la funcion buildTrigramProfile, se podría implementar una condición que trunque el texto original a una cantidad máxima de caracteres
+y/o trunque el TrigramProfile generado descartando los trigramas con frecuencia menor a un cierto umbral. Tambien se puede consideraer
+cambiar algunas de las estructuras de datos utilizadas para optimizar las operaciones que se realizan en esta función. Por ejemplo, se podría utilizar
+un unodered_map en lugar de un map para almacenar los trigramas y sus frecuencias, ya que las operaciones de búsqueda e inserción en un unordered_map
+son promedio O(1), mientras que en un map son O(log n). Por otro lado, se podrian almacenar los trigramas como wstring en lugar de strings normales, ya que
+de este modo nos ahorramos la conversión de los caracteres unicode a char en la funcion buildTrigramProfile. Finalmente tambien se podria considerar
+el procesamiento paralelo del texto original, dividiendolo en partes y procesandolas en hilos separados, para aprovechar mejor los recursos de la CPU.
 
 ## Lenguajes extra.
 
