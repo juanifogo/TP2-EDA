@@ -77,7 +77,10 @@ float getCosineSimilarity(TrigramProfile &textProfile, TrigramProfile &languageP
     tMatches.clear();
     float score = 0;
     for (auto &element : textProfile) {
-        if (languageProfile.find(element.first) != languageProfile.end()) {
+        if (languageProfile.find(element.first) != languageProfile.end()) { 
+            //computes dot product for each trigram ("vector component") present on both profiles ("vectors")
+			//each vector is normalized (norm = 1) so it equals the cosine of the angle between them (remember X·Y = ||X|| ||Y|| cos(theta))
+			//the more similar the profiles, the closer the angle to 0 degrees, and the closer the cosine to 1
             score += element.second * languageProfile[element.first];
             numberOfTrigramsMatch++;
             tMatches.push_back(element.first);

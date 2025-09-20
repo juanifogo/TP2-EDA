@@ -96,7 +96,12 @@ static bool loadLanguagesData(map<string, string> &languageCodeNames, LanguagePr
     return true;
 }
 
-// Returns true if success
+/*
+* @brief generates trigrams for custom language from corpus
+* @param PATH string containing the path to the corpus texts
+* @return true succeded
+* @return false failed
+*/
 static bool loadCustomLanguages(const string PATH)
 {
     if (!filesystem::exists(PATH) || !filesystem::is_directory(PATH))
@@ -146,7 +151,6 @@ int main(int argc, char *argv[])
     map<string, string> languageCodeNames;
     LanguageProfiles languages;
 
-    // Funcion para crear el archivo csv de cada archivo .txt encontrado
     loadCustomLanguages(TEXTS_PATH);
 
     if (!loadLanguagesData(languageCodeNames, languages))
