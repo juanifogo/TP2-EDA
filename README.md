@@ -2,8 +2,8 @@
 
 ## Integrantes del grupo y contribución al trabajo de cada integrante
 
-* Juan Ignacio Fogolin Lagares:
-* Francisco Paredes Alonso:
+* Juan Ignacio Fogolin Lagares: Implementacion de las funciones de Lequel.cpp, documentacion, bonus point cuello de botella.
+* Francisco Paredes Alonso: Preguntas 1-12 del README, Bonus point de lenguajes extra, documentacion, mejoras en las funciones de Lequel.cpp.
 
 ## Respuestas del enunciado
 
